@@ -1,0 +1,30 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>dev.ja.copilot-shortcut</id>n
+    <name>Alternative Copilot Shortcut</name>
+    <vendor email="mail@ja-dev.eu" url="https://www.j-a.dev">joachim_ansorg</vendor>
+    <description><![CDATA[
+    <p>Prefers the completion popup over Copilot completions if TAB is pressed when both popup and Copilot are showing suggestions.</p>
+    <p>It adds an alternative shortcut <code>SHIFT + TAB</code> to insert Copilot's inlay completion instead when both types of completions are visible.</p>
+    <p>This plugin is only useful if you're using GitHub Copilot's setting <em>Show IDE completions side-by-side</em>.</p>
+  ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.github.copilot</depends>
+
+    <resource-bundle>messages.copilot-shortcut</resource-bundle>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <actionPromoter order="first"
+                        implementation="dev.ja.completionshortcut.CopilotApplyInlaysActionSuppressor"/>
+        <actionPromoter order="last"
+                        implementation="dev.ja.completionshortcut.AlternativeApplyInlaysActionPromoter"/>
+        <postStartupActivity implementation="dev.ja.completionshortcut.AlternativeShortcutStartupActivity"/>
+    </extensions>
+
+    <actions>
+        <action id="dev.ja.alternativeCompletionShortcut" class="dev.ja.completionshortcut.DelegateToCopilotApplyInlaysAction">
+            <keyboard-shortcut first-keystroke="shift TAB" keymap="$default"/>
+        </action>
+    </actions>
+</idea-plugin>
